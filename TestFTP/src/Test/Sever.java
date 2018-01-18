@@ -8,10 +8,11 @@ import java.util.logging.Logger;
 
 /**
  * Created by 63263 on 2017/2/27.
+ *等待客户端发送请求，建立新的线程处理
  */
 public class Sever {
     public static void main(String[] args) throws IOException {
-        final String F_DIR = "D:\\TOEFL";//根路径
+        final String F_DIR = "D:\\TOEFL";//根路径 
         Logger log = Logger.getLogger("");
 //        final int PORT = 22;//监听端口号
         try {
