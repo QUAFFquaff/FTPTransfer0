@@ -77,7 +77,7 @@ public class ClientThread extends Thread{
                 } else if (command.toUpperCase().startsWith("SIZE")) {
                     size(command, writer, clientIp);
                 } else if (command.toUpperCase().startsWith("REST")) {
-                    System.out.println("00000000011");
+                    
                     long length = Long.valueOf(reader.readLine());
                     rest_stor(command,length,writer,tempsocket);
                 } else if (command.toUpperCase().startsWith("RETR")) {
@@ -104,7 +104,7 @@ public class ClientThread extends Thread{
 
     public void rest_stor(String command,long skipLength,PrintWriter writer,Socket tempSocket){
         String filename = command.substring(4).trim();
-        System.out.println("00000000000");
+       
         RandomAccessFile locationFile = null;
         try {
             System.out.println("new file");
@@ -137,6 +137,7 @@ public class ClientThread extends Thread{
 
         System.out.println("Over");
     }
+    //上传文件。“STOR file.txt\r\n”：上传文件 file.txt。
     public void stor(String command,Socket tempsocket,PrintWriter writer) throws IOException {
         String filename = command.substring(4).trim();
         RandomAccessFile outfile = new RandomAccessFile(dir+"\\"+filename,"rw");
@@ -160,6 +161,7 @@ public class ClientThread extends Thread{
         writer.flush();
         tempsocket.close();
     }
+    //下载文件。“RETR file.txt \r\n”：下载文件 file.txt
     public void retr(String command,Socket tempsocket,PrintWriter writer){
         String file = command.substring(4).trim();
         System.out.println(file);
@@ -175,7 +177,7 @@ public class ClientThread extends Thread{
                     writer.flush();
                     try {
                         outfile = new RandomAccessFile(dir + "/" + file, "r");
-                        outputStream = tempsocket.getOutputStream();
+                        outputStream = tempsocket.getOutputStream();//我觉得这两行可以删一个
 
                     } catch (FileNotFoundException e) {
                         e.getMessage();
@@ -186,9 +188,9 @@ public class ClientThread extends Thread{
                 byte bytebuffer[] = new byte[1024];
                 int length;
                 try {
-                    while ((length = outfile.read(bytebuffer)) != -1) {
-                        outputStream = tempsocket.getOutputStream();
-                        outputStream.write(bytebuffer);
+                    while ((length = outfile.read(bytebuffer)) != -1) {//读文件，直到文件末尾
+                        outputStream = tempsocket.getOutputStream();//我觉得这两行可以删一个
+                        outputStream.write(bytebuffer);//将读到的内容传输给客户端
                     }
                     outputStream.close();
                     outfile.close();
@@ -215,6 +217,7 @@ public class ClientThread extends Thread{
         writer.flush();
         System.out.println("用户" + clientIp +  "     SIZE命令完成");
     }
+    // 227 entering passive mode  (h1,h2,h3,h4,p1,p2)
     public Socket pasv(String clientIp,String username,String password,PrintWriter writer,Socket tempsocket){
         ServerSocket ss;
         int port_high;
@@ -247,6 +250,7 @@ public class ClientThread extends Thread{
         }
         return tempsocket;
     }
+    //改变工作目录。如：“CWD dirname\r\n”
     public void cwd(String command, PrintWriter writer){
         String str = command.substring(3).trim();
         String tmpDir = dir +"/" + str;
