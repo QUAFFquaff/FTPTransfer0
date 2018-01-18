@@ -11,9 +11,9 @@ public class Client {
     public static void main(String[] args){
 
         Client client = new Client();
-        String location = "D:\\传说中的d盘-----工作\\作业\\大二下学期\\网络课程实践";
+        String location = "some place";
         try{
-            Socket s = new Socket("localhost",9999);
+            Socket s = new Socket("localhost",9999);//可以改成neu的地址
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
 
@@ -29,6 +29,7 @@ public class Client {
                 } else if (command.toUpperCase().startsWith("PASS")) {
                     client.pass(writer,command,reader);
                 } else if(command.toUpperCase().startsWith("PWD")){
+                    //显示当前目录
                     writer.println("PWD");
                     writer.flush();
                     System.out.println(reader.readLine());
@@ -74,6 +75,7 @@ public class Client {
         }
 
     }
+    //
     public void rest(String command,PrintWriter writer,BufferedReader reader,Socket dataSocket,String location){
         System.out.println("stor  or  retr");
         Scanner scanner = new Scanner(System.in);
@@ -168,6 +170,7 @@ public class Client {
         }
 
     }
+    //下载文件。“RETR file.txt \r\n”：下载文件 file.txt
     public void retr(String command,PrintWriter writer,String location,Socket dataSocket,BufferedReader reader) {
         String filename = command.substring(4).trim();
         String reponse;
@@ -284,6 +287,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+    //让服务器在数据端口监听，进入被动模式
     public Socket pasv(PrintWriter writer,String command,BufferedReader reader) throws IOException {
         String reponse;
         writer.println("PASV");
@@ -305,6 +309,7 @@ public class Client {
         }
 
     }
+    //
     public void user(PrintWriter writer,String command,BufferedReader reader){
         writer.println(command);
         writer.flush();
@@ -315,6 +320,7 @@ public class Client {
             e.printStackTrace();
         }
     }
+    //使用用户名和密码检验用户合法性
     public void pass(PrintWriter writer,String command,BufferedReader reader){
         writer.println(command);
         writer.flush();
